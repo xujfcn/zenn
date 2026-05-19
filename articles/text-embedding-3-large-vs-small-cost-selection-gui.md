@@ -8,109 +8,113 @@ published: true
 
 # text-embedding-3-large は使うべき？small とのコスト・品質・選び方
 
-RAG やセマンティック検索を作るとき、多くの人が同じ疑問で止まります。
+RAG やセマンティック検索を導入する際、多くの開発者が悩むのがこの問題です。
 
-> 我到底该用 `text-embedding-3-large`，还是用更便宜的 `text-embedding-3-small`？
+> 結局、`text-embedding-3-large` を使うべきか、それとも安価な `text-embedding-3-small` で十分なのか？
 
-答えは「large が常に良い」でも「small で十分」でもありません。
+答えは「large が常に最良」でも「small で十分」でもありません。
 
-更准确的说法是：**如果检索质量直接影响业务结果，large 值得测试；如果项目还在早期或数据量特别大，small 往往是更稳的起点。**
+より正確に言うと、**検索品質がビジネス成果に直結するなら large をテストする価値あり。プロジェクト初期やデータ量が膨大な場合は small から始めるのが堅実です。**
 
 ![embedding model cost and quality comparison dashboard](https://raw.githubusercontent.com/xujfcn/images/main/blog/posts/embedding-cost-quality-dashboard.webp)
 
-実プロジェクトの観点から、embedding モデル選定で見るべきポイントを整理します。
+この記事では、実際のプロジェクト視点で embedding モデル選定のポイントを解説します。
 
-## 先说结论：怎么选？
+## まず結論：どう選ぶ？
 
-可以直接按这个表判断：
+この表を参考にしてください。
 
-| 场景 | 推荐起点 | 原因 |
+| シーン | 推奨スタート | 理由 |
 |---|---|---|
-| 企业知识库问答 | text-embedding-3-large | 召回质量更重要 |
-| 多语言 RAG | text-embedding-3-large | 非英文和跨语言检索更值得测试 |
-| 客服机器人 | large 或 small A/B 测试 | 看错误回答成本 |
-| 内部工具搜索 | text-embedding-3-small | 成本优先，容错较高 |
-| MVP / demo | text-embedding-3-small | 先跑通链路 |
-| 海量文档索引 | small 或 large 降维 | 控制存储和检索成本 |
-| 代码/技术文档搜索 | large + rerank | 语义和精确匹配都重要 |
+| 企業ナレッジベースQA | text-embedding-3-large | 検索品質が最重要 |
+| 多言語RAG | text-embedding-3-large | 非英語・クロス言語検索の精度向上 |
+| カスタマーサポートBot | large/smallでA/Bテスト | 誤回答のコスト次第 |
+| 社内ツール検索 | text-embedding-3-small | コスト優先・許容度高め |
+| MVP / デモ | text-embedding-3-small | まずは動作確認 |
+| 大規模ドキュメントインデックス | small または large の次元削減 | ストレージ・検索コスト抑制 |
+| コード/技術ドキュメント検索 | large + rerank | セマンティック＆精度両立 |
 
-如果你只能记一句话：
+一言でまとめるなら、
 
-**先用 small 建基线，再用 large 在真实 query 上评测提升。**
+**まず small でベースラインを作り、large で実際のクエリを評価してみましょう。**
 
-## text-embedding-3-large 强在哪里？
+## text-embedding-3-large の強み
 
-`text-embedding-3-large` 是更高能力的 embedding 模型。
+`text-embedding-3-large` は高性能な embedding モデルです。
 
-根据 OpenAI 官方文档，它默认输出 3072 维向量，最大输入 8192 tokens，定位是英文和非英文任务上的高能力 embedding 模型。
+OpenAI公式ドキュメントによると、デフォルトで3072次元ベクトルを出力し、最大入力は8192トークン。英語・非英語問わず高精度な埋め込みを狙ったモデルです。
 
-它的优势主要体现在：
+主な強みは以下の通りです。
 
-1. 更强的语义表达能力
-2. 更适合复杂查询
-3. 更适合多语言或跨语言检索
-4. 对长文档知识库更友好
-5. 更适合作为生产级 RAG 的候选模型
+1. より強力なセマンティック表現
+2. 複雑なクエリへの対応力
+3. 多言語・クロス言語検索に強い
+4. 長文ドキュメントにも対応しやすい
+5. 本番RAG用途の有力候補
 
-但它也有代价：
+ただし、コスト面では
 
-- 单位 token 成本更高
-- 默认向量维度更大
-- 向量库存储成本更高
-- 检索时内存和索引压力更大
+- 1トークンあたりのAPIコストが高い
+- デフォルトのベクトル次元数が大きい
+- ベクトルDBのストレージコスト増
+- 検索時のメモリ・インデックス負荷増
 
-所以，选 large 的前提应该是：它带来的召回提升能覆盖额外成本。
+といったデメリットもあります。
 
-## text-embedding-3-small 适合什么？
+つまり、large を選ぶなら「品質向上が追加コストを上回る」ことが前提です。
 
-`text-embedding-3-small` 的定位更偏成本效率。
+## text-embedding-3-small が向いているケース
 
-它适合：
+`text-embedding-3-small` はコスト効率重視のモデルです。
 
-- FAQ 搜索
-- 小型知识库
-- 早期 MVP
-- 内部检索工具
-- 单语言内容库
-- 对错误召回容忍度较高的场景
+向いている用途は
 
-很多项目没必要一开始就上 large。
+- FAQ検索
+- 小規模ナレッジベース
+- 初期MVP
+- 社内検索ツール
+- 単一言語のコンテンツ
+- 検索ミスにある程度寛容な場面
 
-尤其当你还没有真实用户问题、没有评测集、没有线上反馈时，上大模型向量可能只是“感觉更稳”，但你无法证明它真的更好。
+多くのプロジェクトは、最初から large を使う必要はありません。
 
-## 成本不只看 API 价格
+特に、実際のユーザーの質問や評価データ、フィードバックがまだ無い段階では、「大きい embedding の方が安心」と感じても、その効果を証明できません。
 
-Embedding 成本不只是调用模型那一项。
+## コストはAPI料金だけじゃない
 
-你还要算：
+Embedding のコストは API の利用料だけではありません。
 
-| 成本项 | 受什么影响 |
+他にも以下のコストが発生します。
+
+| コスト項目 | 影響要因 |
 |---|---|
-| API 调用成本 | 输入 tokens 数量、重复索引次数 |
-| 向量库存储 | 文档数量、chunk 数、向量维度 |
-| 检索延迟 | 索引规模、维度、top_k |
-| 内存/磁盘 | 向量数量和精度 |
-| 维护成本 | 重建索引、版本迁移、评测 |
+| API利用料 | 入力トークン数・再インデックス頻度 |
+| ベクトルDBストレージ | ドキュメント数・チャンク数・ベクトル次元 |
+| 検索レイテンシ | インデックス規模・次元数・top_k |
+| メモリ/ディスク | ベクトル数・精度 |
+| 運用コスト | インデックス再構築・バージョン移行・評価 |
 
-举个简单例子：
+例えば、
 
-如果你有 100 万个 chunk，每个向量 3072 维，使用 float32 存储，单纯向量数据大约是：
+100万チャンク、1ベクトル3072次元、float32で保存した場合、ベクトルデータだけで
 
 ```text
 1,000,000 × 3072 × 4 bytes ≈ 12.3 GB
 ```
 
-如果降到 1536 维，大约就是一半。
+となります。
 
-这还不包括索引结构、metadata、数据库额外开销。
+1536次元にすれば約半分です。
 
-所以大规模项目一定要关注 `dimensions` 参数和向量数据库成本。
+これにインデックス構造やメタデータ、DBのオーバーヘッドも加わります。
 
-## dimensions 参数怎么用？
+大規模運用では `dimensions` パラメータとベクトルDBコストに要注意です。
 
-OpenAI 第三代 embedding 模型支持通过 `dimensions` 控制输出向量大小。
+## dimensions パラメータの使い方
 
-示例：
+OpenAI 第三世代 embedding モデルは `dimensions` で出力ベクトルの次元数を指定できます。
+
+例：
 
 ```python
 from openai import OpenAI
@@ -131,106 +135,106 @@ vector = response.data[0].embedding
 print(len(vector))
 ```
 
-这对生产环境很有用。
+これは本番環境で非常に役立ちます。
 
-你可以测试：
+例えば
 
-- large 3072 维
-- large 1536 维
-- large 1024 维
-- small 默认维度
+- large 3072次元
+- large 1536次元
+- large 1024次元
+- small デフォルト次元
 
-然后比较 top 5 召回率、延迟和成本。
+などでテストし、top 5 のリコール率・レイテンシ・コストを比較しましょう。
 
-## 选型不要只看 MTEB 分数
+## MTEBスコアだけで選ばない
 
-公开 benchmark 有参考价值，但不要把它当最终答案。
+公開ベンチマークは参考になりますが、それが最終判断基準ではありません。
 
-你的业务数据可能和 benchmark 完全不同：
+実際のビジネスデータはベンチマークと大きく異なることが多いです。
 
-- 用户问题很短
-- 文档是中英混合
-- 内容里有很多产品名和错误码
-- 有大量表格和参数说明
-- 用户经常用口语表达
+- ユーザーの質問が短い
+- ドキュメントが日英混在
+- 製品名やエラーコードが多い
+- 表やパラメータ説明が多い
+- 口語表現が多用される
 
-所以最好建立自己的小评测集。
+自分のデータで小さな評価セットを作るのがベストです。
 
-最简单的格式：
+シンプルなフォーマット例：
 
-| query | 应召回文档 | 类型 |
+| クエリ | 正解ドキュメント | 種別 |
 |---|---|---|
-| 怎么查看余额？ | billing.md | FAQ |
-| base_url 应该填什么？ | quickstart.md | technical |
-| Claude Code 怎么配置？ | claude-code.md | integration |
-| API 调用失败 401 怎么办？ | auth-errors.md | troubleshooting |
+| 残高の確認方法は？ | billing.md | FAQ |
+| base_url には何を入れる？ | quickstart.md | technical |
+| Claude Code の設定方法は？ | claude-code.md | integration |
+| API呼び出しで401エラーが出た場合？ | auth-errors.md | troubleshooting |
 
-每个模型跑一遍，看 top 3 / top 5 是否命中。
+各モデルで top 3 / top 5 に正解が入るか確認しましょう。
 
-## 一个可执行的 A/B 测试流程
+## 実践的なA/Bテスト手順
 
-推荐你这样测：
+おすすめの評価フローは以下です。
 
-### 1. 准备 50-200 个真实 query
+### 1. 50〜200件の実クエリを用意
 
-不要自己拍脑袋写。优先用：
+自作ではなく、できるだけ
 
-- 站内搜索日志
-- 客服问题
-- 用户群问题
-- 工单标题
-- 文档评论
+- サイト内検索ログ
+- サポート問い合わせ
+- ユーザーコミュニティの質問
+- チケットタイトル
+- ドキュメントコメント
 
-### 2. 标注正确答案文档
+などから収集しましょう。
 
-每个 query 标 1-3 个正确 chunk 或文档。
+### 2. 正解ドキュメントをアノテーション
 
-### 3. 建立多个索引
+各クエリに対し、1〜3件の正解チャンクやドキュメントを紐付けます。
 
-例如：
+### 3. 複数のインデックスを作成
+
+例：
 
 - index_small_default
 - index_large_3072
 - index_large_1536
 
-### 4. 跑召回评测
+### 4. リコール評価を実施
 
-核心指标：
+主な指標：
 
-| 指标 | 含义 |
+| 指標 | 意味 |
 |---|---|
-| Recall@3 | 前 3 个结果是否包含正确文档 |
-| Recall@5 | 前 5 个结果是否包含正确文档 |
-| MRR | 正确文档排得越靠前越好 |
-| latency | 查询耗时 |
-| cost | 索引和查询成本 |
+| Recall@3 | 上位3件に正解が含まれるか |
+| Recall@5 | 上位5件に正解が含まれるか |
+| MRR | 正解が上位ほど高評価 |
+| latency | クエリ応答速度 |
+| cost | インデックス・検索コスト |
 
-### 5. 决定是否升级 large
+### 5. large へのアップグレード判断
 
-如果 large 只提升 1%，但成本高很多，未必值得。
+large で1%しか改善しないのにコストが大幅増なら、無理に使う必要はありません。
 
-如果 large 把 Recall@5 从 78% 提到 90%，而业务又很依赖准确检索，那就很值得。
+逆に、Recall@5 が78%→90%に上がり、ビジネス的に精度が重要なら、large を選ぶ価値は十分あります。
 
-## RAG 质量差，未必是 embedding 模型的问题
+## RAG の品質問題＝embedding モデルのせいとは限らない
 
-很多时候，换成 large 也救不了系统。
+large に変えても改善しない場合、他に原因があることが多いです。
 
-因为问题可能在别处：
-
-| 问题 | 表现 | 优先修复 |
+| 問題 | 症状 | 優先対応 |
 |---|---|---|
-| chunk 切坏了 | 找到的内容上下文不完整 | 重新切块 |
-| metadata 缺失 | 无法按语言/权限/产品过滤 | 补 metadata |
-| query 太短 | “扣费问题”召回不稳定 | query rewrite |
-| 文档过期 | 找到了旧答案 | 加更新时间和版本过滤 |
-| 没有 rerank | top 结果相似但不精确 | 加 rerank |
-| prompt 太松 | 模型根据常识乱答 | 强制只根据资料回答 |
+| chunk 切り方が悪い | コンテキストが不完全 | 再チャンク |
+| metadata 不足 | 言語・権限・製品で絞れない | metadata追加 |
+| クエリが短すぎる | 「課金問題」などで不安定 | クエリリライト |
+| ドキュメントが古い | 古い情報がヒットする | 更新日・バージョンで絞る |
+| rerank 未導入 | 上位が似てるだけで不正確 | rerank追加 |
+| プロンプトが緩い | モデルが常識で回答 | 情報ソース限定プロンプト |
 
-所以选模型前，先保证 RAG 管线别太粗糙。
+まずは RAG パイプライン全体の品質を見直しましょう。
 
-## 在 OpenAI 兼容接口中切换 embedding 模型
+## OpenAI互換APIでembeddingモデルを切り替える
 
-如果你通过 OpenAI SDK 接入，切换模型很简单。
+OpenAI SDK を使っている場合、モデル切り替えは簡単です。
 
 ```python
 from openai import OpenAI
@@ -240,91 +244,87 @@ client = OpenAI(
     base_url="https://crazyrouter.com/v1"
 )
 
-# 成本效率优先
+# コスト重視
 small = client.embeddings.create(
     model="text-embedding-3-small",
     input="semantic search for AI documentation"
 )
 
-# 质量优先
+# 品質重視
 large = client.embeddings.create(
     model="text-embedding-3-large",
     input="semantic search for AI documentation"
 )
 ```
 
-如果你用 Crazyrouter 这类 OpenAI 兼容网关，通常不用改 SDK，只改模型名和 base URL。
+Crazyrouter のような OpenAI 互換ゲートウェイを使えば、SDKはそのままでモデル名と base URL を変えるだけでOKです。
 
-你可以先在 [Crazyrouter Playground](https://crazyrouter.com/playground?utm_source=blog&utm_medium=article&utm_campaign=dev_community) 验证调用，再把同样参数放进服务端。
+まずは [Crazyrouter Playground](https://crazyrouter.com/playground?utm_source=zenn&utm_medium=article&utm_campaign=embedding_i18n) で動作確認し、同じパラメータをサーバー側に適用しましょう。
 
-## 推荐的项目路线图
+## 推奨プロジェクトロードマップ
 
-### 阶段 1：MVP
+### フェーズ1：MVP
 
-- 用 text-embedding-3-small
-- 本地或 pgvector 存储
-- top 5 检索
-- 不加复杂 rerank
-- 目标：跑通链路
+- text-embedding-3-small を利用
+- ローカル or pgvector で保存
+- top 5 検索
+- rerank など複雑な処理は省略
+- まずは動作することが目標
 
-### 阶段 2：真实评测
+### フェーズ2：実データ評価
 
-- 收集用户 query
-- 标注正确文档
-- 测 small vs large
-- 调整 chunk 策略
-- 目标：找到召回瓶颈
+- ユーザークエリを収集
+- 正解ドキュメントをアノテーション
+- small vs large で比較
+- chunk戦略を調整
+- ボトルネック特定が目標
 
-### 阶段 3：生产优化
+### フェーズ3：本番最適化
 
-- 使用 large 或 large 降维版本
-- 加 hybrid search
-- 加 rerank
-- 加权限过滤
-- 加引用来源
-- 目标：稳定、可解释、可控成本
+- large または large の次元削減版を利用
+- ハイブリッド検索導入
+- rerank追加
+- 権限フィルタ追加
+- 情報ソースの引用表示
+- 安定性・説明性・コスト制御が目標
 
-## 结论：large 不是默认答案，但值得认真测试
+## 結論：large はデフォルトではないが、真剣にテストする価値あり
 
-`text-embedding-3-large` 的价值在于更强的语义表达能力，尤其适合高质量 RAG、多语言知识库和复杂语义搜索。
+`text-embedding-3-large` の強みは高いセマンティック表現力。高品質RAG、多言語ナレッジベース、複雑な検索には特に有効です。
 
-但工程上不要盲目上最强模型。
+ただし、最強モデルを盲目的に選ぶのは避けましょう。
 
-更好的策略是：
+おすすめの進め方は
 
-1. 用 small 建立成本和效果基线
-2. 用真实 query 测 large 的提升
-3. 用 dimensions 控制向量大小
-4. 加 rerank 和 hybrid search，而不是只靠换模型
-5. 根据业务错误成本决定是否升级
+1. small でコスト・品質のベースラインを作る
+2. 実クエリで large の効果を評価
+3. dimensions でベクトル次元を調整
+4. rerank やハイブリッド検索も活用（モデル変更だけに頼らない）
+5. ビジネス上の誤答コストでアップグレード判断
 
-如果 RAG 结果直接影响用户决策、客服体验或付费转化，`text-embedding-3-large` 很可能值得。
+RAG の結果がユーザー体験や売上に直結するなら、`text-embedding-3-large` は十分検討に値します。
 
-如果只是内部工具或早期验证，先从 small 开始更务实。
+一方、社内ツールや初期検証なら small から始めるのが現実的です。
 
 ## FAQ
 
-### text-embedding-3-large 一定比 text-embedding-3-small 好吗？
+### text-embedding-3-large は text-embedding-3-small より必ず優れている？
 
-通常能力更强，但不代表每个项目都值得用。要看真实 query 的召回提升是否覆盖成本。
+基本的に性能は上ですが、すべてのプロジェクトでコストに見合うとは限りません。実クエリでのリコール向上がコストを上回るかで判断しましょう。
 
-### dimensions 降低后会不会影响效果？
+### dimensions を下げると品質は落ちる？
 
-可能会。降维能减少存储和检索成本，但可能降低召回质量。建议用自己的评测集测试。
+影響する可能性があります。次元削減でストレージ・検索コストは下がりますが、リコール精度が下がる場合も。自分の評価セットで検証をおすすめします。
 
-### RAG 项目应该先优化模型还是切块？
+### RAG プロジェクトはモデル最適化とチャンク戦略、どちらを優先すべき？
 
-先优化切块和评测。chunk 策略很差时，换更强 embedding 模型也可能效果有限。
+まずはチャンク戦略と評価セットの整備を。チャンクが悪いと、どんなに強い embedding でも効果が限定的です。
 
-### 多语言知识库更适合 text-embedding-3-large 吗？
+### 多言語ナレッジベースは text-embedding-3-large が向いている？
 
-值得优先测试。官方定位里 large 适合英文和非英文任务，多语言检索通常更依赖语义表达能力。
+優先的にテストする価値があります。公式にも large は英語・非英語両対応とされ、多言語検索ではセマンティック表現力が重要です。
 
-### 可以用 Crazyrouter 调用 text-embedding-3-large 吗？
+### Crazyrouter で text-embedding-3-large を使える？
 
-可以通过 OpenAI 兼容的 `/v1/embeddings` 端点调用。代码里使用 `https://crazyrouter.com/v1` 作为 base URL 即可。
+OpenAI互換の `/v1/embeddings` エンドポイント経由で利用可能です。コードの base URL を `https://crazyrouter.com/v1` に設定してください。
 
-
-## Crazyrouter で試す
-
-Embeddings、RAG、複数 AI モデルを 1 つの OpenAI-compatible API キーで扱いたい場合は、[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=embedding_i18n) を試せます。SDK の base URL は `https://crazyrouter.com/v1` です。
