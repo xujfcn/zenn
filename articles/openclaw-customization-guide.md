@@ -6,6 +6,8 @@ topics: ["openclaw", "ai", "customization", "docker"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 ## はじめに
 
 OpenClawはオープンソースのAIアシスタントランタイムフレームワークとして、マルチモデル・マルチチャネル・マルチプラグインの柔軟なアーキテクチャを提供しています。しかし、本当の強みはデフォルト設定ではなく、その**極めて高いカスタマイズ性**にあります。
@@ -25,7 +27,7 @@ OpenClawのカスタマイズに着手する前に、ファイル構成を理解
 ```json5
 {
   // デフォルトモデル
-  "defaultModel": "anthropic/claude-sonnet-4-20250514",
+  "defaultModel": "anthropic/claude-sonnet-4-6",
 
   // Gatewayリスニングポート
   "port": 18789,

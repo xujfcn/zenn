@@ -6,6 +6,8 @@ topics: ["openclaw", "ai", "automation", "selfhosted"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 多くの人がOpenClawを「チャットで質問→回答を得る」レベルで使っていますが、本当の実力は水面下に隠れています。マルチAgent協調、動的UI生成、自動化ワークフロー、ブラウザ制御、サンドボックスセキュリティ——これらの上級機能こそ、AIを「おもちゃ」から「生産性ツール」に変える鍵です。
 
 ## OpenClaw 上級テクニック①：マルチAgent協調システム
@@ -20,7 +22,7 @@ OpenClawでは複数のAgentを設定し、条件に応じて自動ルーティ�
     list: {
       coder: {
         agentDir: "~/.openclaw/agents/coder",
-        model: { primary: "anthropic/claude-opus-4-20250514" },
+        model: { primary: "anthropic/claude-opus-4-8" },
       },
       writer: {
         agentDir: "~/.openclaw/agents/writer",
@@ -77,7 +79,7 @@ GatewayのHTTPサーバーが`/__openclaw__/canvas/`パスで提供。
     {
       schedule: "0 9 * * 1-5",  // 平日9時
       task: "今日のニュースをまとめてSlackに投稿",
-      model: "openai/gpt-4o-mini",  // コスト節約
+      model: "gpt-4o-mini",  // コスト節約
     },
   ],
 }
@@ -166,4 +168,3 @@ browser(action="act", request={kind:"click", ref:"login-button"})
 
 OpenClawの上級機能を活用すれば、単なるチャットボットを超えた本格的なAIワークフローが構築できます。マルチAgent協調で複雑なタスクを分担し、Cronで自動化し、Canvasで動的UIを生成し、ブラウザで情報収集——すべてが一つのプラットフォームで完結します。
 
-AIモデルの選択に迷ったら、[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=openclaw_advanced)がおすすめ。627+モデルを1つのキーで、公式の約55%の価格で利用できます。

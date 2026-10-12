@@ -6,9 +6,11 @@ topics: ["ai", "chatbot", "feishu", "openclaw"]
 published: true
 ---
 
+> Reviewed 2026-10-12: use the [current catalogue and prices](https://crazyrouter.com/en/pricing). Previous universal-discount, fixed-model-count and unverified free-credit claims are retired. Prices depend on the model, billing unit, account group and request time.
+
 # 手把手教你用 CrazyRouter + OpenClaw 一键部署飞书 AI 机器人
 
-> 一条命令部署，10 分钟配置飞书，你的企业就拥有了能调用 300+ AI 模型的智能助手。
+> 一条命令部署，10 分钟配置飞书，你的企业就拥有了能调用 当前兼容模型的智能助手。
 
 ## 前言
 
@@ -19,12 +21,12 @@ published: true
 - 🔧 自建 AI 机器人需要写大量代码
 - 💰 ChatGPT Plus $20/月，Claude Pro $20/月，加起来太贵
 
-**现在有了更好的方案：** CrazyRouter + OpenClaw，一条命令部署，飞书里直接对话 300+ AI 模型，按量付费，大多数团队每月 $5-15 就够了。
+**现在有了更好的方案：** CrazyRouter + OpenClaw，一条命令部署，飞书里直接对话 当前兼容模型，按量付费，大多数团队每月 $5-15 就够了。
 
 ## 整体方案
 
 ```
-飞书群聊/私聊 → 飞书机器人 → OpenClaw → CrazyRouter API → 300+ AI 模型
+飞书群聊/私聊 → 飞书机器人 → OpenClaw → CrazyRouter API → 当前兼容模型
                                                             ├── GPT-4o / GPT-4.5
                                                             ├── Claude Opus 4 / Sonnet 4
                                                             ├── Gemini 2.5 Pro
@@ -34,11 +36,6 @@ published: true
 
 你需要准备：
 
-| 准备项 | 说明 | 获取方式 |
-|--------|------|---------|
-| 一台服务器 | Linux，1GB 内存即可 | 推荐 [Vultr](https://vultr.com) $5/月 VPS |
-| CrazyRouter API Key | 统一访问 300+ AI 模型 | [crazyrouter.com](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=feishu_bot) 注册获取 |
-| 飞书企业管理员权限 | 创建和审批应用 | 飞书管理后台 |
 
 ## 第一步：一条命令部署 OpenClaw
 
@@ -213,13 +210,6 @@ openclaw gateway restart
 
 ## 为什么选择 CrazyRouter？
 
-| 对比项 | 直接用 OpenAI | CrazyRouter |
-|--------|-------------|-------------|
-| 模型数量 | 仅 OpenAI 系列 | 300+ 模型 |
-| 价格 | 官方原价 | 低至官方 55% |
-| 切换模型 | 换 API Key | 同一个 Key |
-| 网络要求 | 需科学上网 | 国内直连 |
-| 付费方式 | 按量预付 | 按量付费，充值即用 |
 
 👉 注册 CrazyRouter：[crazyrouter.com](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=feishu_bot)
 
@@ -245,7 +235,6 @@ openclaw gateway restart
 ### Q: 费用怎么算？
 
 - 服务器：$5/月（最低配置即可）
-- AI 模型调用：按量付费，通过 CrazyRouter 比官方便宜 45%
 - 飞书：企业版免费功能即可，无额外费用
 
 ### Q: 可以在多个群里同时使用吗？
@@ -262,7 +251,7 @@ openclaw gateway restart
 4. **1 分钟**：连接 OpenClaw
 5. **开始用**：飞书里直接和 AI 对话
 
-从此你的飞书就是一个全能 AI 助手，背后有 300+ 模型随时切换，成本只有 ChatGPT Plus 的零头。
+从此你的飞书就是一个全能 AI 助手，背后有 当前兼容模型随时切换，成本只有 ChatGPT Plus 的零头。
 
 ---
 

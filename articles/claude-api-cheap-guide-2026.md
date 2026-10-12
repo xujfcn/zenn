@@ -1,10 +1,12 @@
 ---
-title: "【2026年】Claude APIを最安で使う方法：サブスク不要で40%以上節約"
+title: "【2026年】Claude APIを最安で使う方法：モデル別の料金と節約方法"
 emoji: "💰"
 type: "tech"
 topics: ["AI", "Claude", "API", "LLM", "Anthropic"]
 published: true
 ---
+
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
 
 Claude APIの料金、高いと感じていませんか？
 
@@ -16,27 +18,15 @@ Claude Opus 4は入力$15/出力$75（per 1Mトークン）、Sonnet 4.6でも$3
 
 ## Claude API 2026年の公式料金
 
-| モデル | 入力 (per 1M) | 出力 (per 1M) | キャッシュ入力 | 用途 |
-|:--|:--|:--|:--|:--|
-| Claude Opus 4 | $15.00 | $75.00 | $1.50 | 高度な推論 |
-| Claude Sonnet 4.6 | $3.00 | $15.00 | $0.30 | コスパ最強 |
-| Claude Haiku 3.5 | $0.80 | $4.00 | $0.08 | 高速・低コスト |
 
 Anthropicに直接課金すると、これが定価です。ここからどう削るか。
 
 ---
 
-## 方法1：AIゲートウェイ経由で40-55%オフ
+## 方法1：AIゲートウェイ経由で — Current pricing
 
 最もシンプルな節約方法は、**AI APIゲートウェイ**を経由すること。ゲートウェイはボリュームディスカウントを交渉済みで、その割引をユーザーに還元します。
 
-[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=claude_api_cheap)は627以上のモデルを公式の約55%で提供するゲートウェイです：
-
-| モデル | Anthropic直接 | Crazyrouter | 節約率 |
-|:--|:--|:--|:--|
-| Claude Opus 4 | $15/$75 | ~$8.25/$41.25 | 45% |
-| Claude Sonnet 4.6 | $3/$15 | ~$1.65/$8.25 | 45% |
-| Claude Haiku 3.5 | $0.80/$4.00 | ~$0.44/$2.20 | 45% |
 
 ### コード例：2行変更するだけ
 
@@ -50,7 +40,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="claude-sonnet-4.6",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": "Pythonでクイックソートを実装して"}]
 )
 print(response.choices[0].message.content)
@@ -86,12 +76,6 @@ messages = [
 
 すべてのリクエストにClaude Opus 4を使う必要はありません：
 
-| タスク | 推奨モデル | コスト（出力1M） |
-|:--|:--|:--|
-| 簡単なQ&A | Claude Haiku 3.5 | $4.00 |
-| コーディング | Claude Sonnet 4.6 | $15.00 |
-| 複雑な分析 | Claude Opus 4 | $75.00 |
-| 単純な分類 | DeepSeek Chat | $0.28 |
 
 Crazyrouterなら同じAPIキーでClaude以外のモデルにも切り替え可能：
 
@@ -104,7 +88,7 @@ response = client.chat.completions.create(
 
 # コーディングはClaude Sonnet
 response = client.chat.completions.create(
-    model="claude-sonnet-4.6",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": "RustでHTTPサーバーを書いて"}]
 )
 ```
@@ -127,7 +111,7 @@ response = client.chat.completions.create(
 
 ```python
 response = client.chat.completions.create(
-    model="claude-sonnet-4.6",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": "Yes or Noで答えて：東京は日本の首都？"}],
     max_tokens=10  # 短い回答を強制
 )
@@ -141,12 +125,6 @@ response = client.chat.completions.create(
 
 月10万リクエスト（平均500入力+500出力トークン）の場合：
 
-| 方法 | Claude Sonnet 4.6 月額 |
-|:--|:--|
-| Anthropic直接 | ~$900 |
-| Crazyrouter経由 | ~$495 |
-| + モデル使い分け | ~$200-300 |
-| + キャッシュ併用 | ~$100-200 |
 
 **組み合わせれば、直接課金の80%以上を節約可能。**
 
@@ -154,7 +132,6 @@ response = client.chat.completions.create(
 
 ## まとめ
 
-1. **AIゲートウェイ**（Crazyrouter等）で基本料金を40-55%カット
 2. **プロンプトキャッシュ**で繰り返しコストを90%削減
 3. **モデル使い分け**で不要なコストを排除
 4. **バッチ処理**で非リアルタイム処理を50%オフ
@@ -162,4 +139,4 @@ response = client.chat.completions.create(
 
 Claude APIは高い——でも、使い方次第で大幅に安くなります。
 
-👉 [Crazyrouter — 627+モデルを最安で](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=claude_api_cheap)
+👉 [Crazyrouter — 対応モデルを最安で](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=claude_api_cheap)

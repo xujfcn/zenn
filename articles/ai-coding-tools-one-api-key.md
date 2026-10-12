@@ -6,6 +6,8 @@ topics: ["AI", "Cursor", "VSCode", "Python", "LLM"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 ## この記事について
 
 2026年、AIコーディングツールは開発者の必須ツールになりました。Cursor、Cline、Aider、Continue...選択肢は豊富ですが、それぞれ別のAPIキーが必要だったり、設定方法がバラバラだったりして、意外と面倒です。
@@ -62,7 +64,7 @@ export OPENAI_BASE_URL="https://crazyrouter.com/v1"
 | 用途 | モデル | 理由 |
 |------|--------|------|
 | Tab補完 | `gpt-4o-mini` | 高速・低コスト |
-| Chat | `claude-sonnet-4-20250514` | コード理解力最強 |
+| Chat | `claude-sonnet-4-6` | コード理解力最強 |
 | Composer | `deepseek-chat` | コスパ最強 |
 
 ### Cursorの裏技
@@ -83,7 +85,7 @@ Cursorの月額$20のProプランを使わなくても、自分のAPIキーを�
 ```
 Base URL: https://crazyrouter.com/v1
 API Key:  sk-あなたのキー
-Model ID: claude-sonnet-4-20250514
+Model ID: claude-sonnet-4-6
 ```
 
 ### settings.json での設定
@@ -93,7 +95,7 @@ Model ID: claude-sonnet-4-20250514
   "cline.apiProvider": "openai-compatible",
   "cline.openaiBaseUrl": "https://crazyrouter.com/v1",
   "cline.openaiApiKey": "sk-あなたのキー",
-  "cline.openaiModelId": "claude-sonnet-4-20250514"
+  "cline.openaiModelId": "claude-sonnet-4-6"
 }
 ```
 
@@ -102,7 +104,7 @@ Model ID: claude-sonnet-4-20250514
 Clineは1つのモデルしか設定できませんが、タスクに応じて切り替えると効率的です：
 
 ```
-複雑なリファクタリング → claude-sonnet-4-20250514（最高品質）
+複雑なリファクタリング → claude-sonnet-4-6（最高品質）
 日常的なコーディング   → deepseek-chat（コスパ最強、$0.14/100万トークン）
 バグ修正・小さな変更   → gpt-4o-mini（高速）
 アルゴリズム問題       → deepseek-reasoner（推論特化）
@@ -122,7 +124,7 @@ Clineは1つのモデルしか設定できませんが、タスクに応じて�
     {
       "title": "Claude Sonnet (Crazyrouter)",
       "provider": "openai",
-      "model": "claude-sonnet-4-20250514",
+      "model": "claude-sonnet-4-6",
       "apiBase": "https://crazyrouter.com/v1",
       "apiKey": "sk-あなたのキー"
     },
@@ -178,7 +180,7 @@ export OPENAI_API_BASE="https://crazyrouter.com/v1"
 aider --model deepseek-chat
 
 # Claude Sonnetで開始（品質重視）
-aider --model claude-sonnet-4-20250514
+aider --model claude-sonnet-4-6
 
 # GPT-4oで開始
 aider --model gpt-4o
@@ -272,12 +274,6 @@ model: deepseek-chat
 
 1日100回のAIコーディング支援を使った場合（平均500入力 + 200出力トークン/回）：
 
-| モデル | 月額コスト |
-|--------|-----------|
-| `deepseek-chat` | 約 $0.13 |
-| `gpt-4o-mini` | 約 $0.59 |
-| `gpt-4o` | 約 $9.75 |
-| `claude-sonnet-4` | 約 $13.50 |
 
 DeepSeek V3なら**月額約$0.13**（約20円）で済みます。
 
@@ -326,7 +322,7 @@ def fibonacci(n):
 print(code_review(my_code, model="deepseek-chat"))
 
 # Claudeでレビュー（高品質）
-print(code_review(my_code, model="claude-sonnet-4-20250514"))
+print(code_review(my_code, model="claude-sonnet-4-6"))
 ```
 
 ## まとめ

@@ -6,6 +6,8 @@ topics: ["openclaw", "ai", "automation", "iot", "workflow"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 ## はじめに
 
 AIアシスタントはチャットウィンドウでの質疑応答マシンだけではありません。OpenClawは、デバイス接続・タスク管理・反復作業の自動化まで、日々のワークフローに本当に組み込めるオープンソースのAI Agentフレームワークです。
@@ -46,7 +48,7 @@ agents:
       - channel: telegram
         filter: "料金|購入|トライアル"
   - name: support-bot
-    model: claude-sonnet-4-20250514
+    model: claude-sonnet-4-6
     bindings:
       - channel: discord
 ```
@@ -67,7 +69,7 @@ OpenClawには精確なCronエンジンが内蔵されており、各タスク�
 cron:
   - schedule: "0 9 * * *"
     prompt: "本日のAI業界ニュースを3件要約したブリーフィングを生成"
-    model: claude-sonnet-4-20250514
+    model: claude-sonnet-4-6
     thinking: high
   - schedule: "0 20 * * 5"
     prompt: "今週のコンテンツ運営週報を生成"

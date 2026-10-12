@@ -6,6 +6,8 @@ topics: ["openclaw", "ai", "llm", "selfhosted"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 OpenClawはオープンソースのAIアシスタントフレームワークとして、特定のモデルベンダーにロックインされない柔軟な**Provider体系**を持っています。OpenAI、Anthropic、Google、DeepSeekなどのクラウドモデルはもちろん、OllamaやLlamaなどのローカルモデルも接続可能。本記事ではOpenClaw カスタムモデルの設定方法を体系的に解説します。
 
 ## OpenClaw カスタムモデルの基本：Provider体系を理解する
@@ -54,7 +56,7 @@ OPENAI_API_KEY_1, _2, _3       # 番号付き複数キー
     defaults: {
       model: {
         primary: "openai/gpt-5.1-codex",
-        fast: "openai/gpt-4o-mini",
+        fast: "gpt-4o-mini",
       },
     },
   },
@@ -70,7 +72,7 @@ OPENAI_API_KEY_1, _2, _3       # 番号付き複数キー
   agents: {
     defaults: {
       model: {
-        primary: "anthropic/claude-opus-4-20250514",
+        primary: "anthropic/claude-opus-4-8",
       },
     },
   },
@@ -166,16 +168,15 @@ OpenClaw設定：
 
 ## OpenClaw カスタムモデル：APIゲートウェイで一括管理
 
-### OpenClaw カスタムモデル × Crazyrouter（627+モデル一括接続）
+### OpenClaw カスタムモデル × Crazyrouter（対応モデル一括接続）
 
-複数のAPI Keyを管理するのが面倒なら、**Crazyrouter**がおすすめです。1つのAPI Keyで627以上のモデルにアクセスでき、料金は公式の約55%オフ：
 
 ```json5
 {
   agents: {
     defaults: {
       model: {
-        primary: "openai/anthropic/claude-sonnet-4-20250514",
+        primary: "openai/anthropic/claude-sonnet-4-6",
         fallback: "openai/gpt-4o",
       },
       providers: {
@@ -196,9 +197,9 @@ OpenClaw設定：
   agents: {
     defaults: {
       model: {
-        primary: "openai/claude-sonnet-4-20250514",
+        primary: "openai/claude-sonnet-4-6",
         fallback: "openai/gpt-4o",
-        fast: "openai/gpt-4o-mini",
+        fast: "gpt-4o-mini",
       },
     },
   },
@@ -210,11 +211,10 @@ primaryが失敗するとfallbackに自動切替。simpleタスクにはfastモ�
 #### OpenClaw カスタムモデルのコスト最適化戦略
 
 1. **タスク別モデル選択**：簡単な質問はmini、複雑なコーディングはopus
-2. **APIゲートウェイ活用**：Crazyrouter経由で約45%コスト削減
 3. **ローカル+クラウドハイブリッド**：プライバシー重視タスクはローカル、品質重視はクラウド
 
 ## まとめ
 
 OpenClaw カスタムモデル設定の柔軟性は、他のAIアシスタントツールと一線を画しています。クラウド、ローカル、ゲートウェイ——あらゆる接続パターンに対応し、failoverやコスト最適化も設定一つで実現できます。
 
-まだモデル選びに悩んでいるなら、まずは[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=openclaw_models)で気軽に試してみてください。627+モデルが1つのキーで使えます。
+まだモデル選びに悩んでいるなら、まずは[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=openclaw_models)で気軽に試してみてください。対応モデルが1つのキーで使えます。

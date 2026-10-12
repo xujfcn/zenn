@@ -6,6 +6,8 @@ topics: ["openclaw", "ai", "telegram", "nodejs", "chatbot"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 ## はじめに
 
 自分専用のAIアシスタントを構築してみたいと思ったことはありませんか？ウェブ版のChatGPTではなく、自分のサーバーで動作し、TelegramやDiscordからいつでも呼び出せるプライベートなAIアシスタント。
@@ -64,7 +66,7 @@ openclaw onboard
 
 ---
 
-## ステップ2：AIモデルの設定（API Key設定、627+モデル対応）
+## ステップ2：AIモデルの設定（API Key設定、対応モデル対応）
 
 ### 設定ファイルの構造
 
@@ -107,11 +109,11 @@ OpenClawの全設定は1つのファイルに集約されています：
 
 例えば、`SOUL.md`に「簡潔に話すこと。無駄な前置きは不要」と書けば、アシスタントは端的な応答スタイルになります。
 
-### Crazyrouter経由で627+モデルに一括アクセス
+### Crazyrouter経由で対応モデルに一括アクセス
 
 OpenClawは`openai`、`anthropic`、`google`、`openrouter`、`deepseek`など複数のプロバイダーを内蔵しています。それぞれのAPI Keyを直接設定することもできますが、もっと便利な方法があります。
 
-**Crazyrouter**を統一ゲートウェイとして使えば、1つのAPI Keyで627以上のモデルにアクセスできます（GPT-4o、Claude 4、Gemini 2.5、DeepSeek R1など）：
+**Crazyrouter**を統一ゲートウェイとして使えば、1つのAPI Keyで現在利用可能なモデルにアクセスできます（GPT-4o、Claude 4、Gemini 2.5、DeepSeek R1など）：
 
 ```json5
 {
@@ -119,7 +121,7 @@ OpenClawは`openai`、`anthropic`、`google`、`openrouter`、`deepseek`など�
     defaults: {
       workspace: "~/.openclaw/workspace",
       model: {
-        primary: "openai/anthropic/claude-sonnet-4-20250514",
+        primary: "openai/anthropic/claude-sonnet-4-6",
       },
       providers: {
         openai: {
@@ -141,9 +143,9 @@ OpenClawは`openai`、`anthropic`、`google`、`openrouter`、`deepseek`など�
   agents: {
     defaults: {
       model: {
-        primary: "openai/anthropic/claude-sonnet-4-20250514",
+        primary: "openai/anthropic/claude-sonnet-4-6",
         fallback: "openai/gpt-4o",        // メインがダウンした時用
-        fast: "openai/gpt-4o-mini",        // 軽いタスク用（コスト削減）
+        fast: "gpt-4o-mini",        // 軽いタスク用（コスト削減）
       },
     },
   },
@@ -174,7 +176,7 @@ Telegramは設定が最も簡単で、機能も最も充実しています。
     defaults: {
       workspace: "~/.openclaw/workspace",
       model: {
-        primary: "openai/anthropic/claude-sonnet-4-20250514",
+        primary: "openai/anthropic/claude-sonnet-4-6",
       },
       providers: {
         openai: {
@@ -267,7 +269,7 @@ openclaw dashboard          # Web管理画面を開く
 
 ここまでで、OpenClawのインストール→モデル設定→プラットフォーム接続→初回メッセージ送信まで、すべてのステップが完了しました。要約すると、たった3ステップです：**OpenClawをインストール → 設定を記述 → サービスを起動**。
 
-AIモデルの選択で迷っている方には、[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=tutorial&utm_campaign=openclaw_tutorial)がおすすめです。1つのAPI Keyで627以上のモデルに対応し、OpenAI・Anthropic・Google・DeepSeekなどすべての主要プロバイダーをサポート。従量課金で無料枠もあるため、個人開発者にとってOpenClawとの最適な組み合わせです。
+AIモデルの選択で迷っている方には、[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=tutorial&utm_campaign=openclaw_tutorial)がおすすめです。1つのAPI Keyで現在利用可能なモデルに対応し、OpenAI・Anthropic・Google・DeepSeekなどすべての主要プロバイダーをサポート。従量課金で無料枠もあるため、個人開発者にとってOpenClawとの最適な組み合わせです。
 
 質問があれば、[OpenClaw GitHub](https://github.com/nicepkg/openclaw)でIssueを立てるか、コミュニティに参加してください。
 

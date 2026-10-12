@@ -6,9 +6,11 @@ topics: ["ai", "api", "infrastructure", "devops"]
 published: true
 ---
 
+> Reviewed 2026-10-12: current model IDs, prices and endpoint support must be checked against the [catalogue](https://crazyrouter.com/en/pricing). Historical incident figures below have not been reverified in this update.
+
 # We Routed 10 Million API Calls Last Month. Here's What Broke.
 
-CrazyRouter sits between developers and AI providers. Every API call to Claude, GPT, Gemini, DeepSeek, or any of the 300+ models we support passes through our gateway. Last month, that was 10.2 million requests.
+CrazyRouter sits between developers and AI providers. Every API call to Claude, GPT, Gemini, DeepSeek, or any of the compatible models in the current catalogue we support passes through our gateway. Last month, that was 10.2 million requests.
 
 Most of them worked fine. This article is about the ones that didn't, and what we built to make sure your app never notices.
 
@@ -108,7 +110,9 @@ Spot the difference? `function.parameters` vs `input_schema`. `type: "function"`
 
 We rewrote the protocol translation layer from scratch. Not just field mapping — full semantic translation that preserves behavior across providers:
 
-```python
+Illustrative pseudocode (the nested-schema implementation is omitted):
+
+```text
 class ToolSchemaTranslator:
     def openai_to_anthropic(self, tools):
         return [{
@@ -173,7 +177,7 @@ Average savings across our user base: **62% compared to using a single provider 
 
 ## Try It
 
-One API key. 300+ models. Automatic fallback. Smart routing.
+One API key. compatible models in the current catalogue. Automatic fallback. Smart routing.
 
 ```bash
 # Replace your OpenAI base URL. That's it.

@@ -6,6 +6,8 @@ topics: ["python", "ai", "api", "infrastructure", "reliability"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 # AIモデル自動フォールバック実装ガイド：APIダウンタイムゼロを目指す
 
 「Claude APIが急に503を返して、本番環境が30分止まった…」
@@ -329,7 +331,7 @@ FALLBACK_CHAINを安い順に並べることで回避できます。コスト重
 
 ### Q4: どのAPIゲートウェイがフォールバックに適していますか？
 
-OpenAI SDK互換であれば何でも使えます。Crazyrouter は627以上のモデルに対応しているので、フォールバックチェーンの選択肢が最も多いです。[価格表はこちら](https://crazyrouter.com/pricing?utm_source=zenn&utm_medium=article&utm_campaign=ja_fallback)。
+OpenAI SDK互換であれば何でも使えます。Crazyrouter は現在利用可能なモデルに対応しているので、フォールバックチェーンの選択肢が最も多いです。[価格表はこちら](https://crazyrouter.com/pricing?utm_source=zenn&utm_medium=article&utm_campaign=ja_fallback)。
 
 ### Q5: テスト方法は？
 

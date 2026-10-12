@@ -6,6 +6,8 @@ topics: ["ai", "llm", "tokenization", "bpe"]
 published: true
 ---
 
+> 2026-10-12 更新：モデルごとの料金・対応 API は[最新カタログ](https://crazyrouter.com/en/pricing)で確認してください。一律割引、固定モデル数、未確認の無料クレジットの記述は撤回しました。
+
 GPT-5に「你好 Hello」と入力すると、モデルが実際に処理するのは**2トークン**です。文字数ではなくトークン数で課金されます。
 
 一方、コンピュータ上では同じテキストが**12バイト**として保存されています。
@@ -124,7 +126,7 @@ for model in ["gpt-5", "gpt-5-mini", "deepseek-v3.2", "claude-sonnet-4"]:
     print(f"{model}: {usage.prompt_tokens} in / {usage.completion_tokens} out")
 ```
 
-[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=tokens_vs_bytes)なら、1つのAPIキーで627以上のモデルにアクセスできます。
+[Crazyrouter](https://crazyrouter.com?utm_source=zenn&utm_medium=article&utm_campaign=tokens_vs_bytes)なら、1つのAPIキーで現在利用可能なモデルにアクセスできます。
 
 ## クイックリファレンス
 
